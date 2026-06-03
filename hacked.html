@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BATCOM Security Console</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,sans-serif;
+}
+
+body{
+    background:#080808;
+    color:#ffd700;
+    padding:20px;
+}
+
+.header{
+    text-align:center;
+    border-bottom:2px solid #ffd700;
+    padding-bottom:15px;
+}
+
+h1{
+    font-size:40px;
+}
+
+h2{
+    margin-top:5px;
+    color:white;
+}
+
+#clock{
+    color:#aaa;
+    margin-top:10px;
+}
+
+.status{
+    color:#00ff88;
+    font-weight:bold;
+    margin-top:10px;
+    font-size:18px;
+}
+
+.critical{
+    color:#ff4444 !important;
+    animation:textPulse 1s infinite;
+}
+
+@keyframes textPulse{
+    50%{
+        opacity:.4;
+    }
+}
+
+.banner{
+    display:none;
+    margin-top:15px;
+    background:#220000;
+    border:1px solid #ff4444;
+    color:#ff6666;
+    text-align:center;
+    padding:12px;
+    border-radius:8px;
+}
+
+.grid{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.card{
+    background:#111;
+    border:1px solid #ffd700;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 0 10px rgba(255,215,0,.15);
+    transition:.3s;
+}
+
+.breach{
+    animation:borderPulse 2s infinite;
+}
+
+@keyframes borderPulse{
+    50%{
+        border-color:#ff4444;
+        box-shadow:0 0 20px rgba(255,0,0,.5);
+    }
+}
+
+.metric{
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.case{
+    margin-top:10px;
+    padding:10px;
+    border-left:3px solid #ffd700;
+    background:#181818;
+}
+
+.high{
+    color:#ff4444;
+}
+
+.medium{
+    color:#ffaa00;
+}
+
+#logs{
+    height:220px;
+    overflow:hidden;
+    font-family:Consolas,monospace;
+    line-height:1.8;
+}
+
+.footer{
+    margin-top:20px;
+    text-align:center;
+    color:#666;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    left:0;
+    width:100%;
+    height:2px;
+    background:rgba(255,215,0,.15);
+    animation:scan 5s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes scan{
+    from{
+        top:0;
+    }
+    to{
+        top:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>🦇 WAYNE ENTERPRISES</h1>
+
+<h2>BATCOM SECURITY NETWORK</h2>
+
+<div id="clock"></div>
+
+<div class="status" id="status">
+SYSTEM SECURE
+</div>
+
+<div class="banner" id="banner">
+⚠ GOTHAM SECURITY ALERT — BATCOM COMPROMISED ⚠
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>Batcomputer</h3>
+
+<div class="metric">ONLINE</div>
+
+CPU : 41%<br>
+Database : ACTIVE<br>
+Satellite Link : CONNECTED<br>
+Encryption : ENABLED
+
+</div>
+
+<div class="card">
+
+<h3>Intruder Profile</h3>
+
+<div class="metric" id="intruder">
+NONE
+</div>
+
+Alias : UNKNOWN<br>
+Location : MASKED<br>
+Access Level : NONE<br>
+Threat Score : 0/100
+
+</div>
+
+<div class="card">
+
+<h3>Batcave Status</h3>
+
+<div class="metric" id="cave">
+SECURE
+</div>
+
+Armory : ONLINE<br>
+Vehicle Bay : ONLINE<br>
+Security Grid : ACTIVE<br>
+Power Core : STABLE
+
+</div>
+
+<div class="card">
+
+<h3>Villain Database</h3>
+
+<div class="case">
+Joker<br>
+<span class="high">Threat : EXTREME</span>
+</div>
+
+<div class="case">
+Riddler<br>
+<span class="high">Threat : HIGH</span>
+</div>
+
+<div class="case">
+Penguin<br>
+<span class="medium">Threat : MEDIUM</span>
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Active Cases</h3>
+
+<div class="case">
+Arkham Incident<br>
+Status : Monitoring
+</div>
+
+<div class="case">
+Downtown Bank Heist<br>
+Status : Responding
+</div>
+
+<div class="case">
+Joker Escape Report<br>
+Status : Investigating
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Activity Feed</h3>
+
+<div id="logs"></div>
+
+</div>
+
+</div>
+
+<div class="footer">
+BATCOM v3.1 | Gotham Intelligence Division
+</div>
+
+<script>
+
+setInterval(()=>{
+
+document.getElementById("clock").innerHTML =
+new Date().toLocaleTimeString();
+
+},1000);
+
+window.onload=function(){
+
+    document.getElementById("status").innerHTML =
+    "NETWORK COMPROMISED";
+
+    document.getElementById("status").classList.add("critical");
+
+    document.getElementById("intruder").innerHTML =
+    "ACTIVE";
+
+    document.getElementById("cave").innerHTML =
+    "COMPROMISED";
+
+    document.getElementById("banner").style.display =
+    "block";
+
+    document.querySelectorAll(".card").forEach(card=>{
+        card.classList.add("breach");
+    });
+
+    alert("⚠ BATCOM SECURITY BREACH DETECTED");
+
+    startLogs();
+
+};
+
+function startLogs(){
+
+const logs=[
+
+"Unauthorized access detected...",
+"BATCOM firewall breached...",
+"Security camera network disabled...",
+"Intruder acquired privileged access...",
+"Batcomputer database accessed...",
+"Batmobile telemetry intercepted...",
+"Batcave security grid compromised...",
+"Unknown actor maintaining persistence...",
+"Threat level escalated to CRITICAL...",
+"Operator intervention required..."
+
+];
+
+let i=0;
+
+const interval=setInterval(()=>{
+
+if(i<logs.length){
+
+document.getElementById("logs").innerHTML +=
+"> " + logs[i] + "<br>";
+
+i++;
+
+}else{
+
+clearInterval(interval);
+
+}
+
+},1000);
+
+}
+
+</script>
+
+</body>
+</html>
